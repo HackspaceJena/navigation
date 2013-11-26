@@ -1,0 +1,7 @@
+base navigation
+author Tim Schumacher
+email tim@bandenkrieg.hacked.jp
+date 2013-11-12
+name Navigation
+desc A Navigation that uses the object representation class
+url https://bk-dev.hacked.jp/project/view/3/
