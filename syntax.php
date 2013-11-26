@@ -12,7 +12,7 @@ if (!defined ('DOKU_INC')) die();
 if (!defined ('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
 require_once DOKU_PLUGIN . 'syntax.php';
 
-require_once dirname (__FILE__) . DIRECTORY_SEPARATOR . 'DokuWikiObjectRepresentation.class.php';
+require_once dirname (__FILE__) . DIRECTORY_SEPARATOR . 'objectrepresentation' . DIRECTORY_SEPARATOR . 'DokuWikiObjectRepresentation.class.php';
 
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
@@ -22,11 +22,11 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
 
   function getInfo () {
     return array ('author' => 'Tim Schumacher',
-      'email' => 'me@someplace.com',
-      'date' => '2005-07-28',
-      'name' => 'Now Plugin',
-      'desc' => 'Include the current date and time',
-      'url' => 'http://www.dokuwiki.org/devel:syntax_plugins');
+      'email' => 'tim@bandenkrieg.hacked.jp',
+      'date' => '2013-11-12',
+      'name' => 'Navigation',
+      'desc' => 'A Navigation that uses the object representation class',
+      'url' => 'https://bk-dev.hacked.jp/project/view/3/');
   }
 
   function getType () {
@@ -39,7 +39,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
 
   function connectTo ($mode) {
     $this->Lexer->addSpecialPattern('{{indexmenu_n>(\d+)}}',$mode,'plugin_navigation');
-    $this->Lexer->addSpecialPattern ('\[NOW\]', $mode, 'plugin_navigation');
+    $this->Lexer->addSpecialPattern ('\[Navigation\]', $mode, 'plugin_navigation');
   }
 
   function handle ($match, $state, $pos, &$handler) {
