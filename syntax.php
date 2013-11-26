@@ -38,7 +38,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
   }
 
   function connectTo ($mode) {
-    $this->Lexer->addSpecialPattern('{{indexmenu_n>(\d+)}}',$mode,'plugin_navigation');
+    $this->Lexer->addSpecialPattern('{{indexmenu>.+?}}',$mode,'plugin_navigation');
     $this->Lexer->addSpecialPattern ('\[Navigation\]', $mode, 'plugin_navigation');
   }
 
@@ -70,15 +70,16 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
       }
     });
 
-    $content = '<ul>';
-
-    $iter->all(function(DokuWikiNode $node) use (&$content){
-      if ($node->getName() != 'root') {
-        $content .= '<li>' . $node->getFullID() . ':' . $node->getMetaData('sortorder') . '</li>';
+    $root = $iter->getRoot();
+    $content = '';
+    if ($root instanceof DokuWikiNameSpace) {
+      $nodes = $root->getNodes();
+      if ($nodes->count() > 0) {
+        $content .= '<ul>';
+        $content .= $this->RenderNodes($root);
+        $content .= '</ul>';
       }
-    });
-
-    $content .= '</ul>';
+    }
 
     // $data is what the function handle return'ed.
     if ($mode == 'xhtml') {
@@ -86,5 +87,18 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
       return true;
     }
     return false;
+  }
+
+  private function RenderNodes(DokuWikiNameSpace $node) {
+    $output = '';
+    foreach ($node->getNodes() as $node) {
+      /** @var DokuWikiNode $node */
+      if ($node instanceof DokuWikiPage) {
+        $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $node->getName() . '</a></li>';
+      } else {
+        $output .= '<li>' . $node->getName() . '<ul>' . $this->RenderNodes($node) . '</ul></li>';
+      }
+    }
+    return $output;
   }
 }
