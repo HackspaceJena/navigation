@@ -20,6 +20,10 @@ require_once dirname (__FILE__) . DIRECTORY_SEPARATOR . 'objectrepresentation' .
  */
 class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
 
+  // TODO add a config option for this
+  private $maxDepth = 2;
+  private $depth = 0;
+
   function getInfo () {
     return array ('author' => 'Tim Schumacher',
       'email' => 'tim@bandenkrieg.hacked.jp',
@@ -90,13 +94,16 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
   }
 
   private function RenderNodes(DokuWikiNameSpace $node) {
+    $this->depth++;
     $output = '';
     foreach ($node->getNodes() as $node) {
       /** @var DokuWikiNode $node */
       if ($node instanceof DokuWikiPage) {
         $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $node->getName() . '</a></li>';
       } else {
-        $output .= '<li>' . $node->getName() . '<ul>' . $this->RenderNodes($node) . '</ul></li>';
+        if ($this->depth <= $this->maxDepth) {
+          $output .= '<li>' . $node->getName() . '<ul>' . $this->RenderNodes($node) . '</ul></li>';
+        }
       }
     }
     return $output;
