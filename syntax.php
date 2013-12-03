@@ -12,6 +12,7 @@ if (!defined ('DOKU_INC')) die();
 if (!defined ('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
 require_once DOKU_PLUGIN . 'syntax.php';
 
+// TODO migrate this to composer
 require_once dirname (__FILE__) . DIRECTORY_SEPARATOR . 'objectrepresentation' . DIRECTORY_SEPARATOR . 'DokuWikiObjectRepresentation.class.php';
 
 /**
@@ -51,8 +52,6 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
   }
 
   function render ($mode, &$renderer, $data) {
-    global $ID;
-
     $iter = new DokuWikiIterator();
 
     $iter->all(function(DokuWikiNode $node) {
