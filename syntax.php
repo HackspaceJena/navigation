@@ -21,7 +21,7 @@ require_once dirname (__FILE__) . DIRECTORY_SEPARATOR . 'objectrepresentation' .
 class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
 
   // TODO add a config option for this
-  private $maxDepth = 2;
+  private $maxDepth = 3;
   private $depth = 0;
 
   function getInfo () {
