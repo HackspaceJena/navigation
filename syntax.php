@@ -98,11 +98,19 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
     $output = '';
     foreach ($node->getNodes() as $node) {
       /** @var DokuWikiNode $node */
+      $title = (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName());
+      $access = auth_quickaclcheck($node->getFullID());
       if ($node instanceof DokuWikiPage) {
-        $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $node->getName() . '</a></li>';
-      } else {
+        if ($access > 0) {
+          $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $title . '</a></li>';
+        }
+
+      } else if($node instanceof DokuWikiNameSpace) {
+        /** @var DokuWikiNameSpace $node */
         if ($this->depth <= $this->maxDepth) {
-          $output .= '<li>' . $node->getName() . '<ul>' . $this->RenderNodes($node) . '</ul></li>';
+          if ($access > 0) {
+            $output .= '<li>' . $title . '<ul>' . $this->RenderNodes($node) . '</ul></li>';
+          }
         }
       }
     }
