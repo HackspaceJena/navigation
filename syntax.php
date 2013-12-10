@@ -43,7 +43,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
   }
 
   function connectTo ($mode) {
-    $this->Lexer->addSpecialPattern('{{indexmenu>.+?}}',$mode,'plugin_navigation');
+    $this->Lexer->addSpecialPattern('{{indexmenu_n>.+?}}',$mode,'plugin_navigation');
     $this->Lexer->addSpecialPattern ('\[Navigation\]', $mode, 'plugin_navigation');
   }
 
@@ -52,6 +52,15 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
   }
 
   function render ($mode, &$renderer, $data) {
+    if (preg_match('/{{indexmenu_n>(\d+)}}/',$data[0],$matches)) {
+      global $ACT, $INFO;
+      if($INFO['isadmin'] && $ACT == 'show') {
+          ptln('<div class="info">');
+          ptln('Sortorder for this node: '.$matches[1]);
+          ptln('</div>');
+      }
+      return false;
+    }
     $iter = new DokuWikiIterator();
 
     $iter->all(function(DokuWikiNode $node) {
