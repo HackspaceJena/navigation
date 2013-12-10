@@ -106,18 +106,27 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin {
     $output = '';
     foreach ($node->getNodes() as $node) {
       /** @var DokuWikiNode $node */
+      if ($node->getName() == 'start')
+        continue;
       $title = (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName());
       $access = auth_quickaclcheck($node->getFullID());
       if ($node instanceof DokuWikiPage) {
         if ($access > 0) {
-          $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $title . '</a></li>';
+          $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
         }
 
       } else if($node instanceof DokuWikiNameSpace) {
         /** @var DokuWikiNameSpace $node */
         if ($this->depth <= $this->maxDepth) {
           if ($access > 0) {
-            $output .= '<li>' . $title . '<ul>' . $this->RenderNodes($node) . '</ul></li>';
+            // lets check if the the namespace has a startpage and if yes link to it
+            if ($start = $node->hasChild('start')) {
+              $access = auth_quickaclcheck($start->getFullID());
+              if ($access > 0) {
+                $title = '<a href="' . wl($start->getFullID()) . '">' . (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName()) . '</a>';
+              }
+            }
+            $output .= '<li>' . $title . '<ul>' . $this->RenderNodes($node) . '</ul></li>' . PHP_EOL;
           }
         }
       }
