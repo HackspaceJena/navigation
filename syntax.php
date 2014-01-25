@@ -134,7 +134,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
                         if ($start = $node->hasChild('start')) {
                             $access = auth_quickaclcheck($start->getFullID());
                             if ($access > 0) {
-                                $title = '<a href="' . wl($start->getFullID()) . '">' . (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName()) . '</a>';
+                                $title = '<a href="' . wl($start->getFullID()) . '">' . (strlen($start->getMetaData('title')) > 0 ? $start->getMetaData('title') : $start->getName()) . '</a>';
                             }
                         }
                         $output .= '<li>' . $title . '<ul>' . $this->RenderNodes($node) . '</ul></li>' . PHP_EOL;
