@@ -119,10 +119,12 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
             /** @var DokuWikiNode $node */
             if ($node->getName() == 'start')
                 continue;
+            if (preg_match($this->exclusion_mask,$node->getFullID()))
+                continue;
             $title = (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName());
             $access = auth_quickaclcheck($node->getFullID());
             if ($node instanceof DokuWikiPage) {
-                if (($access > 0) && (!preg_match($this->exclusion_mask,$node->getFullID())))  {
+                if (($access > 0))  {
                     $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
                 }
 
