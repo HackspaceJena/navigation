@@ -26,6 +26,9 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
     private $maxDepth = 3;
     private $depth = 0;
 
+    /** @var string A regexp to configure which pages to exclude */
+    private $exclusion_mask = '/sidebar/';
+
     function getInfo()
     {
         return array('author' => 'Tim Schumacher',
@@ -119,7 +122,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
             $title = (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName());
             $access = auth_quickaclcheck($node->getFullID());
             if ($node instanceof DokuWikiPage) {
-                if ($access > 0) {
+                if (($access > 0) && (!preg_match($this->exclusion_mask,$node->getFullID())))  {
                     $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
                 }
 
