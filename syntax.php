@@ -22,12 +22,17 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'objectrepresentation' . 
 class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
 {
 
-    // TODO add a config option for this
     private $maxDepth = 3;
     private $depth = 0;
 
     /** @var string A regexp to configure which pages to exclude */
-    private $exclusion_mask = '/sidebar/';
+    private $exclusion_mask = '';
+
+    function __construct()
+    {
+        $this->exclusion_mask = $this->getConf('exclusion_mask');
+        $this->maxDepth = $this->getConf('treedepth');
+    }
 
     function getInfo()
     {
