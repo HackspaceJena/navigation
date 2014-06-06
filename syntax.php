@@ -93,7 +93,9 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
             if ($node instanceof DokuWikiNameSpace) {
                 $node->nodes->uasort(function (DokuWikiNode $a, DokuWikiNode $b) {
                     if ($a->getMetaData('sortorder') == $b->getMetaData('sortorder')) {
-                        return 0;
+                        $title_a = (strlen($a->getMetaData('title')) > 0 ? $a->getMetaData('title') : $a->getName());
+                        $title_b = (strlen($b->getMetaData('title')) > 0 ? $b->getMetaData('title') : $b->getName());
+                        return strnatcasecmp($title_a,$title_b);
                     }
                     return ($a->getMetaData('sortorder') < $b->getMetaData('sortorder')) ? -1 : 1;
                 });
