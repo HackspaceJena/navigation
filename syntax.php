@@ -121,6 +121,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
 
     private function RenderNodes(DokuWikiNameSpace $node)
     {
+        global $INFO;
         $this->depth++;
         $output = '';
         foreach ($node->getNodes() as $node) {
@@ -138,7 +139,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
 
             } else if ($node instanceof DokuWikiNameSpace) {
                 /** @var DokuWikiNameSpace $node */
-                if ($this->depth <= $this->maxDepth) {
+                if (($this->depth <= $this->maxDepth) || (strpos($INFO['id'],$node->getFullID()) === 0)) {
                     if ($access > 0) {
                         // lets check if the the namespace has a startpage and if yes link to it
                         if ($start = $node->hasChild('start')) {
