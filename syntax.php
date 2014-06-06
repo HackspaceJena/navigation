@@ -76,9 +76,12 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
             }
             return false;
         }
+        global $INFO;
+
         $iter = new DokuWikiIterator();
 
-        $iter->all(function (DokuWikiNode $node) {
+        $iter->all(function (DokuWikiNode $node) use($INFO) {
+            $node->setMetaData('active',$node->getFullID() == $INFO['id']);
             if (preg_match('/{{indexmenu_n>(\d+)}}/', $node->getContent(), $matches)) {
                 $node->setMetaData('sortorder', $matches[1]);
             } else {
@@ -102,7 +105,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
         if ($root instanceof DokuWikiNameSpace) {
             $nodes = $root->getNodes();
             if ($nodes->count() > 0) {
-                $content .= '<ul>';
+                $content .= '<ul class="navigation">';
                 $content .= $this->RenderNodes($root);
                 $content .= '</ul>';
             }
@@ -130,7 +133,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
             $access = auth_quickaclcheck($node->getFullID());
             if ($node instanceof DokuWikiPage) {
                 if (($access > 0))  {
-                    $output .= '<li><a href="' . wl($node->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
+                    $output .= '<li><a class="' . ($node->getMetaData('active') ? 'active' : '') .'" href="' . wl($node->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
                 }
 
             } else if ($node instanceof DokuWikiNameSpace) {
@@ -141,7 +144,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
                         if ($start = $node->hasChild('start')) {
                             $access = auth_quickaclcheck($start->getFullID());
                             if ($access > 0) {
-                                $title = '<a href="' . wl($start->getFullID()) . '">' . (strlen($start->getMetaData('title')) > 0 ? $start->getMetaData('title') : $start->getName()) . '</a>';
+                                $title = '<a class="' . ($start->getMetaData('active') ? 'active' : '') .'" href="' . wl($start->getFullID()) . '">' . (strlen($start->getMetaData('title')) > 0 ? $start->getMetaData('title') : $start->getName()) . '</a>';
                             }
                         }
                         $output .= '<li>' . $title . '<ul>' . $this->RenderNodes($node) . '</ul></li>' . PHP_EOL;
@@ -153,7 +156,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
                         $access = auth_quickaclcheck($start->getFullID());
                         if ($access > 0) {
                             $title = (strlen($start->getMetaData('title')) > 0 ? $start->getMetaData('title') : $start->getName());
-                            $output .= '<li><a href="' . wl($start->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
+                            $output .= '<li><a class="' . ($start->getMetaData('active') ? 'active' : '') .'" href="' . wl($start->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
                         }
                     }
                 }
