@@ -145,6 +145,16 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
                             }
                         }
                         $output .= '<li>' . $title . '<ul>' . $this->RenderNodes($node) . '</ul></li>' . PHP_EOL;
+                        $this->depth--;
+                    }
+                } else {
+                    // if we have reached the maximum depth, lets at least check if the namespace has a starting page and display this
+                    if ($start = $node->hasChild('start')) {
+                        $access = auth_quickaclcheck($start->getFullID());
+                        if ($access > 0) {
+                            $title = (strlen($start->getMetaData('title')) > 0 ? $start->getMetaData('title') : $start->getName());
+                            $output .= '<li><a href="' . wl($start->getFullID()) . '">' . $title . '</a></li>' . PHP_EOL;
+                        }
                     }
                 }
             }
