@@ -12,8 +12,12 @@ if (!defined('DOKU_INC')) die();
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
 require_once DOKU_PLUGIN . 'syntax.php';
 
-// TODO migrate this to composer
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'objectrepresentation' . DIRECTORY_SEPARATOR . 'DokuWikiObjectRepresentation.class.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . '../packagist/vendor/autoload.php';
+
+use enko\dokuwiki\objectrepresentation\DokuWikiIterator;
+use enko\dokuwiki\objectrepresentation\DokuWikiNode;
+use enko\dokuwiki\objectrepresentation\DokuWikiNameSpace;
+use enko\dokuwiki\objectrepresentation\DokuWikiPage;
 
 /**
  * All DokuWiki plugins to extend the parser/rendering mechanism
