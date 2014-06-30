@@ -1,3 +1,59 @@
-ul.navigation li a.active {
+.dokuwiki .aside .content p:first-child {
+    display: none !important;
+}
+
+div.navigation {
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+}
+
+div.navigation h3 {
+    padding: 0.5rem;
+}
+
+div.navigation li a.active {
     font-weight: bold;
+    background-color: #eeeeee !important;
+}
+
+div.navigation nav {
+    padding-left: 0 !important;
+}
+
+div.navigation li {
+    list-style-type: none;
+    margin-left: 0;
+}
+
+div.navigation > nav > li > a {
+    border-left: 0;
+}
+
+div.navigation > nav > li nav {
+    padding-left: 0.5rem !important;
+}
+
+div.navigation li a {
+    display: block;
+    border-left: 1px solid #cccccc;
+    /*border-right: 1px solid #cccccc;*/
+    border-bottom: 1px solid #cccccc;
+    padding: 0.3rem;
+}
+
+div.navigation li a .text {
+    margin-left: 0.3rem;
+}
+
+div.navigation li a .icon {
+    color: #bbbbbb;
+}
+
+div.navigation li a:first-child {
+    border-top: 1px solid #cccccc !important;
+}
+
+div.navigation li a:hover {
+    background-color: #eeeeee !important;
+    text-decoration: none;
 }
