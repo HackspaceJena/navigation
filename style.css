@@ -25,19 +25,12 @@ div.navigation li {
     margin-left: 0;
 }
 
-div.navigation > nav > li > a {
-    border-left: 0;
-}
-
 div.navigation > nav > li nav {
     padding-left: 0.5rem !important;
 }
 
 div.navigation li a {
     display: block;
-    border-left: 1px solid #cccccc;
-    /*border-right: 1px solid #cccccc;*/
-    border-bottom: 1px solid #cccccc;
     padding: 0.3rem;
 }
 
@@ -47,10 +40,6 @@ div.navigation li a .text {
 
 div.navigation li a .icon {
     color: #bbbbbb;
-}
-
-div.navigation li a:first-child {
-    border-top: 1px solid #cccccc !important;
 }
 
 div.navigation li a:hover {
