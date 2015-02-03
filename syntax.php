@@ -130,7 +130,7 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
 
     private function RenderNodes(DokuWikiNameSpace $node)
     {
-        global $INFO;
+        global $INFO,$conf;
         $this->depth++;
         $output = '';
         foreach ($node->getNodes() as $node) {
@@ -139,6 +139,12 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
                 continue;
             if (preg_match($this->exclusion_mask,$node->getFullID()))
                 continue;
+            // check if the translation plugin is active and if so, hide all the translation namespaces
+            if (!plugin_isdisabled('translation')) {
+                $translations = $this->getTranslations();
+                if (in_array($node->getName(),$translations))
+                    continue;
+            }
             $title = (strlen($node->getMetaData('title')) > 0 ? $node->getMetaData('title') : $node->getName());
             $access = auth_quickaclcheck($node->getFullID());
             if ($node instanceof DokuWikiPage) {
@@ -173,5 +179,18 @@ class syntax_plugin_navigation extends DokuWiki_Syntax_Plugin
             }
         }
         return $output;
+    }
+
+    /**
+     * @param $conf
+     * @return array|string
+     */
+    private function getTranslations()
+    {
+        global $conf;
+        $translations = strtolower(str_replace(',', ' ', $conf['plugin']['translation']['translations']));
+        $translations = array_unique(array_filter(explode(' ', $translations)));
+        sort($translations);
+        return $translations;
     }
 }
